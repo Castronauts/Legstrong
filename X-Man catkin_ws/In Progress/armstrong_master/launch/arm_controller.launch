@@ -1,3 +1,0 @@
-<launch>
-	<node name="cartesian_keyboard_controller_v4" pkg="armstrong_master" type="cartesian_keyboard_controller_v4" />
-</launch>

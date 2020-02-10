@@ -1,3 +1,0 @@
-<launch>
-	<node name="joystick_controller" pkg="armstrong_master" type="joystick_controller.py" output="screen"/>
-</launch>
