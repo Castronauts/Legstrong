@@ -4,8 +4,8 @@
 #Standard libraries
 import sys
 import pygame
+import os
 import time
-#from tcpcom import TCPClient #IP socket for cameras
 import math
 
 #ROS Libraries
@@ -21,36 +21,13 @@ class Joystick_Object(object):
     def __init__(self):
         #Extra Variables
         self.gripper_load = 0.0
-
-        # #----------------------------------------------------------------------------------------------------
-        # #Pan/Tilt Camera IP Socket Camera #1
-        # #----------------------------------------------------------------------------------------------------
-        # self.IP_ADDRESS = "192.168.1.9"
-        # self.IP_PORT = 23000
-        # self.client = TCPClient(self.IP_ADDRESS, self.IP_PORT, stateChanged = self.onStateChangedOne)
-        # self.rc = self.client.connect()
-
-        # if(self.rc):
-        #     print("Connected 1")
-        # else:
-        #     print("Not connected 1")
-
-        # #----------------------------------------------------------------------------------------------------
-        # #Pan/Tilt Camera IP Socket Camera #2
-        # #----------------------------------------------------------------------------------------------------
-        # self.IP_ADDRESS_2 = "192.168.1.8"
-        # self.IP_PORT_2 = 24000
-        # self.client_2 = TCPClient(self.IP_ADDRESS_2, self.IP_PORT_2, stateChanged = self.onStateChangedTwo)
-        # self.rc_2 = self.client_2.connect()
-
-        # if(self.rc_2):
-        #     print("Connected 2")
-        # else:
-        #     print("Not connected 2")
-
         #----------------------------------------------------------------------------------------------------
         #Pygame/Joystick Initialization
         #----------------------------------------------------------------------------------------------------
+        #Provide Pygame with a Dummy Video Driver to enable functionality
+        os.environ["SDL_VIDEODRIVER"] = "dummy"
+
+        #Initialize Pygame Module
         pygame.init()
 
         # Initialize the joysticks
@@ -94,21 +71,6 @@ class Joystick_Object(object):
     #----------------------------------------------------------------------------------------------------
     #Function Declarations
     #----------------------------------------------------------------------------------------------------
-    # def onStateChangedOne(self, state, msg):
-    #     if state == "CONNECTING":
-    #        print "Client:-- Waiting for connection..."
-    #     elif state == "CONNECTED":
-    #        print "Client:-- Connection estabished."
-    #     elif state == "DISCONNECTED":
-    #        print "Client:-- Connection lost."
-
-    # def onStateChangedTwo(self, state, msg):
-    #     if state == "CONNECTING":
-    #        print "Client:-- Waiting for connection..."
-    #     elif state == "CONNECTED":
-    #        print "Client:-- Connection estabished."
-    #     elif state == "DISCONNECTED":
-    #        print "Client:-- Connection lost."
 
     def updateGripperLoad(self, msg):
         self.gripper_load = msg.load
@@ -160,7 +122,6 @@ class Joystick_Object(object):
         rospy.sleep(0.1)
 
 
-
     def runLoop(self):
         while (not rospy.is_shutdown()):
             #Check user input
@@ -174,14 +135,9 @@ class Joystick_Object(object):
             y_right = self.joystick.get_axis(4)
             trigger_right = self.joystick.get_axis(5)
 
-            #Get Hat Values
-            camera_pads = self.joystick.get_hat(0) #[0]-left,right [1]-top,down
-
             #Get Button Values
             open_button = self.joystick.get_button(0) #A button
             close_button = self.joystick.get_button(1) #B button
-            tilt_up_button = self.joystick.get_button(3) #Y button
-            tilt_down_button = self.joystick.get_button(2) #X button
 
             #Get bumper values
             arm_down = self.joystick.get_button(4) #Left bumper
@@ -427,68 +383,6 @@ class Joystick_Object(object):
                 #Stop just in case keeps moving
                 self.stopMotion()
 
-            # #----------------------------------------------------------------------------------------------------
-            # #Pan/Tilt Commands Camera 1
-            # #----------------------------------------------------------------------------------------------------
-            # #Check pad presses
-            # if (camera_pads[0] != 0 or camera_pads[1] != 0):
-
-            #     #Check left or right
-            #     while (camera_pads[0] != 0):
-
-            #         #Check direction
-            #         if (camera_pads[0] > 0): #Right
-            #             self.client.sendMessage("right")
-            #             time.sleep(0.1)
-
-            #         else: #Left
-            #             self.client.sendMessage("left")
-            #             time.sleep(0.1)
-
-            #         #Recheck values
-            #         pygame.event.get()
-            #         camera_pads = self.joystick.get_hat(0)
-
-            #     #Check front or back
-            #     while (camera_pads[1] != 0):
-
-            #         #Check direction
-            #         if (camera_pads[1] > 0): #Right
-            #             self.client.sendMessage("up")
-            #             time.sleep(0.1)
-
-            #         else: #Left
-            #             self.client.sendMessage("down")
-            #             time.sleep(0.1)
-
-            #         #Recheck values
-            #         pygame.event.get()
-            #         camera_pads = self.joystick.get_hat(0)
-
-            # #----------------------------------------------------------------------------------------------------
-            # #Tilt Commands Camera 2
-            # #----------------------------------------------------------------------------------------------------
-            # if (tilt_up_button != 0.0 or tilt_down_button != 0.0):
-            #     #Check tilt up button only
-            #     while (tilt_up_button != 0 and tilt_down_button == 0.0):
-            #         #Send up command to camera 2
-            #         self.client_2.sendMessage("up")
-            #         time.sleep(0.0001)
-
-            #         #Recheck values
-            #         pygame.event.get()
-            #         tilt_up_button = self.joystick.get_button(2)
-
-            #     #Check tilt down button only
-            #     while (tilt_down_button != 0 and tilt_up_button == 0.0):
-            #         #Send down command to camera 2
-            #         self.client_2.sendMessage("down")
-            #         time.sleep(0.0001)
-
-            #         #Recheck values
-            #         pygame.event.get()
-            #         tilt_down_button = self.joystick.get_button(3)
-
             #Stop motion
             self.stopMotion()
 
@@ -498,8 +392,6 @@ class Joystick_Object(object):
             #Final ROS sleep rate
             self.rate.sleep()
 
-        # self.client.disconnect()
-        # self.client_2.disconnect()
         pygame.quit()
 
 #----------------------------------------------------------------------------------------------------

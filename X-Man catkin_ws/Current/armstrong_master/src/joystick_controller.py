@@ -52,7 +52,10 @@ class Joystick_Object(object):
         #----------------------------------------------------------------------------------------------------
         #Pygame/Joystick Initialization
         #----------------------------------------------------------------------------------------------------
+        #Provide Pygame with a Dummy Video Driver to enable functionality
         os.environ["SDL_VIDEODRIVER"] = "dummy"
+
+        #Initialize Pygame Module
         pygame.init()
 
         # Initialize the joysticks
