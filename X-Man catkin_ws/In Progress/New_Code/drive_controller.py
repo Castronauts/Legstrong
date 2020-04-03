@@ -13,7 +13,7 @@ def callback(message):
 def listener():
 	rospy.init_node('Motor_Control_Listener', anonymous=True)
 	
-	rospy.Subscriber("leggy_wheels", String, callback)
+	rospy.Subscriber("leggy_wheels", String, callback, queue_size=10)
 	
 	rospy.spin()
 
