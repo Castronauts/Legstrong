@@ -1,0 +1,13 @@
+<launch>
+
+   <!-- joy node -->
+  <node respawn="true" pkg="joy" type="joy_node" name="joy" output="screen" >
+    <param name="dev" type="string" value="/dev/input/js0" />
+    <param name="deadzone" value="0.12" />
+  </node>
+
+  <node name="joy_controller" pkg="legstrong_drive" type="joy_controller.py" output="screen"/>
+
+  <node name="Driver_Controlller" pkg="legstrong_drive" type="drive_controller.py" output="screen"/>
+
+</launch>
