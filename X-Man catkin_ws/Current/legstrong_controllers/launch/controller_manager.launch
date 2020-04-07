@@ -1,0 +1,13 @@
+<?xml version="1.0"?>
+
+<launch>
+
+  <include file="$(find legstrong_controllers)/launch/arm_spawn.launch"/>
+
+  <include file="$(find legstrong_controllers)/launch/arm_state_publisher.launch"/>
+
+  <include file="$(find legstrong_controllers)/launch/joystick_publisher.launch"/>
+
+  <include file="$(find legstrong_controllers)/launch/legstrong_drive.launch"/>
+
+</launch>

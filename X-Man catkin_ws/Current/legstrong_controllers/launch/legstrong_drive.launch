@@ -1,0 +1,5 @@
+<launch>
+
+  <node name="drive_controller" pkg="legstrong_controllers" type="drive_controller.py" output="screen"/>
+
+</launch>

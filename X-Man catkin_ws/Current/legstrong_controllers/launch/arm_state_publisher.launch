@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+
+<launch>
+
+  <param name="robot_description" command="$(find xacro)/xacro --inorder '$(find mastering_ros_robot)/urdf/armstrong.xacro'" />
+  
+  <include file="$(find legstrong_controllers)/launch/dynamixel_publisher.launch"/>
+
+  <node name="joint_state_publisher" pkg="joint_state_publisher" type="joint_state_publisher" output="screen">
+    <rosparam param="source_list">[joint_states]</rosparam>
+    <rosparam param="use_gui">FALSE</rosparam>
+  </node>
+  
+</launch>
